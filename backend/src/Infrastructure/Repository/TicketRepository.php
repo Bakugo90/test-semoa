@@ -28,7 +28,7 @@ class TicketRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function findByUser(User $user, ?TicketStatus $status = null, ?TicketPriority $priority = null, int $page = 1, int $limit = 10): array
+    public function findByUser(User $user, ?TicketStatus $status = null, ?TicketPriority $priority = null, int $page = 1, int $limit = 10, string $sortBy = 'createdAt', string $order = 'DESC'): array
     {
         $qb = $this->createQueryBuilder('t')
             ->where('t.createdBy = :user')
@@ -44,7 +44,10 @@ class TicketRepository extends ServiceEntityRepository
                ->setParameter('priority', $priority);
         }
 
-        $qb->orderBy('t.createdAt', 'DESC')
+        $allowedSortFields = ['createdAt', 'updatedAt', 'title', 'status', 'priority'];
+        $sortField = in_array($sortBy, $allowedSortFields) ? $sortBy : 'createdAt';
+        
+        $qb->orderBy('t.' . $sortField, $order)
            ->setFirstResult(($page - 1) * $limit)
            ->setMaxResults($limit);
 

@@ -6,16 +6,14 @@ enum TicketStatus: string
 {
     case OPEN = 'OPEN';
     case IN_PROGRESS = 'IN_PROGRESS';
-    case RESOLVED = 'RESOLVED';
-    case CLOSED = 'CLOSED';
+    case DONE = 'DONE';
 
     public function canTransitionTo(TicketStatus $newStatus): bool
     {
         return match($this) {
-            self::OPEN => $newStatus === self::IN_PROGRESS,
-            self::IN_PROGRESS => $newStatus === self::RESOLVED,
-            self::RESOLVED => $newStatus === self::CLOSED,
-            self::CLOSED => false,
+            self::OPEN => in_array($newStatus, [self::IN_PROGRESS, self::DONE]),
+            self::IN_PROGRESS => $newStatus === self::DONE,
+            self::DONE => false,
         };
     }
 }
