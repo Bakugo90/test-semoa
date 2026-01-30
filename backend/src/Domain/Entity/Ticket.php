@@ -4,10 +4,11 @@ namespace App\Domain\Entity;
 
 use App\Domain\Enum\TicketPriority;
 use App\Domain\Enum\TicketStatus;
+use App\Infrastructure\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[ORM\Table(name: 'tickets')]
 class Ticket
 {
