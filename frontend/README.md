@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - Système de Gestion de Tickets
 
-## Getting Started
+Application Next.js 16 développée avec React 19 et TypeScript pour gérer les tickets de support.
 
-First, run the development server:
+## Stack Technique
+
+- **Framework**: Next.js 16.1.6 (App Router, Turbopack)
+- **React**: 19.2.3
+- **TypeScript**: 5
+- **UI Library**: shadcn/ui (composants pré-construits)
+- **HTTP Client**: axios 1.13.4
+- **Styling**: Tailwind CSS
+
+## Architecture
+
+### Command Pattern
+Toutes les interactions avec l'API suivent le pattern Command pour respecter les principes Clean Architecture :
+- `AuthCommands` : LoginCommand, RegisterCommand
+- `TicketCommands` : CreateTicketCommand, UpdateTicketCommand, DeleteTicketCommand, ListTicketsCommand, GetTicketCommand
+
+
+## Composants shadcn/ui Utilisés
+
+Pour respecter la contrainte de temps, j'ai utilisé **shadcn/ui**, une collection de composants React pré-construits, accessibles et personnalisables basés sur Radix UI et Tailwind CSS.
+
+### Liste des composants installés :
+- **button** - Boutons d'action (créer, supprimer, déconnexion)
+- **input** - Champs de saisie (email, password, titre)
+- **textarea** - Description des tickets
+- **card** - Cartes pour afficher les tickets
+- **form** - Gestion des formulaires avec validation
+- **select** - Dropdowns (statut, priorité, filtres)
+- **badge** - Badges de statut et priorité
+- **label** - Labels de formulaire
+- **dialog** - Modales de confirmation
+- **sonner** - Notifications toast (configurées en haut à droite)
+- **table** - Tableaux de données
+
+## Installation et Démarrage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Installation des dépendances
+pnpm install
+
+# Lancer le serveur de développement
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application démarre sur **http://localhost:3000**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables d'Environnement
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Fichier `.env.local` :
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+```
 
-## Learn More
+## Fonctionnalités
 
-To learn more about Next.js, take a look at the following resources:
+### Authentification
+- Inscription avec validation (email, mot de passe ≥ 6 caractères)
+- Connexion avec JWT stocké en localStorage
+- Redirection automatique selon l'état d'authentification
+- Déconnexion avec suppression du token
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Gestion des Tickets
+- **Liste** : Affichage avec filtres (statut, priorité)
+- **Création** : Formulaire avec titre, description, priorité
+- **Détail** : Vue complète avec actions
+- **Modification** : Changement de statut (OPEN → IN_PROGRESS/DONE)
+- **Suppression** : Avec confirmation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Filtres
+- **Statut** : Tous, Ouvert, En cours, Terminé
+- **Priorité** : Toutes, Basse, Moyenne, Haute
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
