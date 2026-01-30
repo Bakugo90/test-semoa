@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation';
 
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [status, setStatus] = useState('');
-  const [priority, setPriority] = useState('');
+  const [status, setStatus] = useState('all');
+  const [priority, setPriority] = useState('all');
   const [loading, setLoading] = useState(true);
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
@@ -28,9 +28,9 @@ export default function TicketsPage() {
 
   const loadTickets = async () => {
     setLoading(true);
-    const filters: any = {};
-    if (status) filters.status = status;
-    if (priority) filters.priority = priority;
+    const filters: Record<string, string> = {};
+    if (status && status !== 'all') filters.status = status;
+    if (priority && priority !== 'all') filters.priority = priority;
 
     const command = new ListTicketsCommand();
     const result = await command.execute(filters);
@@ -71,7 +71,7 @@ export default function TicketsPage() {
               <SelectValue placeholder="Filtrer par statut" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">Tous</SelectItem>
+              <SelectItem value="all">Tous</SelectItem>
               <SelectItem value="OPEN">Ouvert</SelectItem>
               <SelectItem value="IN_PROGRESS">En cours</SelectItem>
               <SelectItem value="DONE">Terminé</SelectItem>
@@ -83,7 +83,7 @@ export default function TicketsPage() {
               <SelectValue placeholder="Filtrer par priorité" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value=" ">Toutes</SelectItem>
+              <SelectItem value="all">Toutes</SelectItem>
               <SelectItem value="LOW">Basse</SelectItem>
               <SelectItem value="MEDIUM">Moyenne</SelectItem>
               <SelectItem value="HIGH">Haute</SelectItem>

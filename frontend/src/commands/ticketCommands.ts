@@ -30,8 +30,11 @@ export class DeleteTicketCommand {
 }
 
 export class ListTicketsCommand {
-  async execute(filters: any = {}) {
-    const params = new URLSearchParams(filters);
+  async execute(filters: Record<string, string> = {}) {
+    const cleanFilters: Record<string, string> = Object.fromEntries(
+      Object.entries(filters).filter(([_, v]) => v && v.trim() !== '')
+    );
+    const params = new URLSearchParams(cleanFilters);
     const response = await api.get(`/tickets?${params}`);
     return {
       tickets: response.data.data.tickets,
